@@ -1,0 +1,461 @@
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Xyzen Store</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            background-color: #000;
+            color: #fff;
+            margin: 0;
+            padding: 0;
+            overflow-x: hidden;
+        }
+        /* Loading screen styles *//* Loading screen styles */
+        #loading-screen {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background-color: #000;
+            z-index: 9999;
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            align-items: center;
+            color: #fff;
+            font-size: 24px;
+        }
+
+        #loading-screen .loader {
+            border: 8px solid #333;
+            border-top: 8px solid #00aaff;
+            border-radius: 50%;
+            width: 50px;
+            height: 50px;
+            animation: spin 1s linear infinite;
+            margin-bottom: 20px;
+        }
+
+
+    @keyframes spin {
+        0% { transform: rotate(0deg); }
+        100% { transform: rotate(360deg); }
+    }
+
+    #loading-screen .message {
+        font-size: 18px;
+        color: #fff;
+    }
+        .header {
+            padding: 20px;
+            background: #222;
+            box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+            text-align: center;
+            position: sticky;
+            top: 0;
+            z-index: 1000;
+        }
+        .header h1 {
+            margin: 0;
+            font-size: 32px;
+            color: #fff;
+            font-weight: bold;
+            letter-spacing: 1px;
+            animation: fadeIn 2s;
+        }
+        .header h1 span {
+            color: #00aaff;
+        }
+        .description {
+            margin: 40px auto;
+            max-width: 800px;
+            color: #ccc;
+            font-size: 18px;
+            line-height: 1.6;
+            text-align: center;
+            padding: 0 20px;
+            animation: fadeIn 2s;
+        }
+        .container {
+            max-width: 1200px;
+            margin: 20px auto;
+            display: flex;
+            flex-wrap: wrap;
+            gap: 20px;
+            justify-content: center;
+            animation: slideIn 1s;
+        }
+        .product-title {
+            text-align: center;
+            font-weight: bold;
+            font-size: 32px;
+            margin: 40px 0 20px;
+            color: #fff;
+            animation: fadeIn 2s;
+        }
+        .product {
+            padding: 20px;
+            margin: 20px;
+            flex: 1 1 calc(25% - 40px);
+            background-color: #333;
+            border-radius: 8px;
+            box-shadow: 0 4px 8px rgba(0,0,0,0.3);
+            text-align: center;
+            transition: transform 0.3s, box-shadow 0.3s, background-color 0.3s;
+            opacity: 0;
+            animation: fadeInUp 1s forwards;
+        }
+        .product:hover {
+            transform: translateY(-10px);
+            box-shadow: 0 8px 16px rgba(0,0,0,0.5);
+            background-color: #444;
+        }
+        .product h2 {
+            color: #00aaff;
+            font-size: 22px;
+            margin-bottom: 10px;
+        }
+        .product p, .product ul li {
+            color: #ddd;
+            font-size: 16px;
+            margin-bottom: 10px;
+        }
+        .product ul {
+            list-style-type: none;
+            padding-left: 0;
+            margin-bottom: 10px;
+        }
+        .product .price {
+            font-size: 20px;
+            color: #eee;
+            margin-bottom: 10px;
+            font-weight: bold;
+        }
+        .product a {
+            display: inline-block;
+            padding: 12px 24px;
+            background-color: #00aaff;
+            color: white;
+            text-decoration: none;
+            border-radius: 5px;
+            font-size: 18px;
+            font-weight: bold;
+            transition: background-color 0.3s, transform 0.3s;
+        }
+        .product a:hover {
+            background-color: #0088cc;
+            transform: scale(1.05);
+        }
+        .contact-person {
+            margin: 40px auto;
+            max-width: 800px;
+            text-align: center;
+            padding: 0 20px;
+            animation: fadeIn 2s;
+        }
+        .contact-person h2 {
+            font-size: 28px;
+            margin-bottom: 20px;
+            color: #fff;
+        }
+        .contact-person p {
+            font-size: 18px;
+            margin: 10px 0;
+        }
+        .contact-person a {
+            color: #00aaff;
+            text-decoration: none;
+            font-weight: bold;
+        }
+        .contact-person a:hover {
+            text-decoration: underline;
+        }
+        .footer {
+            padding: 20px;
+            background: #222;
+            text-align: center;
+            color: #888;
+            border-top: 1px solid #444;
+        }
+        .footer a {
+            color: #00aaff;
+            text-decoration: none;
+        }
+        .footer a:hover {
+            text-decoration: underline;
+        }
+
+        /* Animations */
+        @keyframes fadeIn {
+            from { opacity: 0; }
+            to { opacity: 1; }
+        }
+        @keyframes fadeInUp {
+            from { opacity: 0; transform: translateY(20px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+        @keyframes slideIn {
+            from { transform: translateY(50px); opacity: 0; }
+            to { transform: translateY(0); opacity: 1; }
+        }
+    </style>
+</head>
+<!-- Loading screen -->
+<div id="loading-screen">
+    <div class="loader"></div>
+    <div class="message">Checking Your Browser - Xyzen</div>
+    <div class="message">DDoS? Jangan Ya Deck Yaa</div>
+</div>
+
+<script>
+    window.addEventListener('load', function() {
+        // Hide the loading screen after 5 seconds
+        setTimeout(function() {
+            document.getElementById('loading-screen').style.display = 'none';
+        }, 5000); // 5 seconds
+    });
+</script>
+
+    <div class="header">
+        <h1>Xyzen <span>Store</span></h1>
+    </div>
+
+    <div class="description">
+       <h5> Xyzen Store adalah store kebutuhan hostingmu yang menyediakan seperti VPS DigitalOcean, Panel Pterodactyl, Script Bot WhatsApp, Script Bot Telegram, dll. Kenapa harus Xyzen Store? Karena pelayanan yang cepat, aman, dan amanah.</h5>
+    </div>
+
+    <div class="product-title">Daftar Produk Xyzen Store</div>
+    <div class="container">
+        <!-- VPS Hosting Products -->
+        <div class="product">
+            <h2>Vps DigitalOcean Ram 1 Core 1</h2>
+            <ul>
+                <li>Ram: 1 Core 1</li>
+                <li>Region: Bebas Pilih</li>
+                <li>OS: Bebas Pilih</li>
+                <li>Versi: Bebas Pilih</li>
+            </ul>
+            <p class="price">Harga: 20.000</p>
+            <a href="https://api.whatsapp.com/send?phone=628983807869&text=Assalamualaikum Kak Saya Mau Beli">Order Now</a>
+        </div>
+
+        <div class="product">
+            <h2>Vps DigitalOcean Ram 2 Core 1</h2>
+            <ul>
+                <li>Ram: 2 Core 1</li>
+                <li>Region: Bebas Pilih</li>
+                <li>OS: Bebas Pilih</li>
+                <li>Versi: Bebas Pilih</li>
+            </ul>
+            <p class="price">Harga: 25.000</p>
+            <a href="https://api.whatsapp.com/send?phone=628983807869&text=Assalamualaikum Kak Saya Mau Beli">Order Now</a>
+        </div>
+
+        <div class="product">
+            <h2>Vps DigitalOcean Ram 2 Core 2</h2>
+            <ul>
+                <li>Ram: 2 Core 2</li>
+                <li>Region: Bebas Pilih</li>
+                <li>OS: Bebas Pilih</li>
+                <li>Versi: Bebas Pilih</li>
+            </ul>
+            <p class="price">Harga: 30.000</p>
+            <a href="https://api.whatsapp.com/send?phone=628983807869&text=Assalamualaikum Kak Saya Mau Beli">Order Now</a>
+        </div>
+
+        <div class="product">
+            <h2>Vps DigitalOcean Ram 4 Core 2</h2>
+            <ul>
+                <li>Ram: 4 Core 2</li>
+                <li>Region: Bebas Pilih</li>
+                <li>OS: Bebas Pilih</li>
+                <li>Versi: Bebas Pilih</li>
+            </ul>
+            <p class="price">Harga: 35.000</p>
+            <a href="https://api.whatsapp.com/send?phone=628983807869&text=Assalamualaikum Kak Saya Mau Beli">Order Now</a>
+        </div>
+
+        <div class="product">
+            <h2>Vps DigitalOcean Ram 8 Core 4</h2>
+            <ul>
+                <li>Ram: 8 Core 4</li>
+                <li>Region: Bebas Pilih</li>
+                <li>OS: Bebas Pilih</
+                <li>Versi: Bebas Pilih</li>
+            </ul>
+            <p class="price">Harga: 45.000</p>
+            <a href="https://api.whatsapp.com/send?phone=628983807869&text=Assalamualaikum Kak Saya Mau Beli">Order Now</a>
+        </div>
+
+        <div class="product">
+            <h2>Vps DigitalOcean Ram 16 Core 4</h2>
+            <ul>
+                <li>Ram: 16 Core 4</li>
+                <li>Region: Bebas Pilih</li>
+                <li>OS: Bebas Pilih</li>
+                <li>Versi: Bebas Pilih</li>
+            </ul>
+            <p class="price">Harga: 70.000</p>
+            <a href="https://api.whatsapp.com/send?phone=628983807869&text=Assalamualaikum Kak Saya Mau Beli">Order Now</a>
+        </div>
+
+        <!-- Control Panel Hosting Products -->
+        <div class="product">
+            <h2>Control Panel Hosting - 1 RAM 30% CPU</h2>
+            <ul>
+                <li>Panel Ram: 1</li>
+                <li>CPU Usage: 30%</li>
+            </ul>
+            <p class="price">Harga: 2.000</p>
+            <a href="https://api.whatsapp.com/send?phone=628983807869&text=Assalamualaikum Kak Saya Mau Beli">Order Now</a>
+        </div>
+
+        <div class="product">
+            <h2>Control Panel Hosting - 2 RAM 60% CPU</h2>
+            <ul>
+                <li>Panel Ram: 2</li>
+                <li>CPU Usage: 60%</li>
+            </ul>
+            <p class="price">Harga: 3.000</p>
+            <a href="https://api.whatsapp.com/send?phone=628983807869&text=Assalamualaikum Kak Saya Mau Beli">Order Now</a>
+        </div>
+
+        <div class="product">
+            <h2>Control Panel Hosting - 3 RAM 90% CPU</h2>
+            <ul>
+                <li>Panel Ram: 3</li>
+                <li>CPU Usage: 90%</li>
+            </ul>
+            <p class="price">Harga: 4.000</p>
+            <a href="https://api.whatsapp.com/send?phone=628983807869&text=Assalamualaikum Kak Saya Mau Beli">Order Now</a>
+        </div>
+
+        <div class="product">
+            <h2>Control Panel Hosting - 4 RAM 110% CPU</h2>
+            <ul>
+                <li>Panel Ram: 4</li>
+                <li>CPU Usage: 110%</li>
+            </ul>
+            <p class="price">Harga: 5.000</p>
+            <a href="https://api.whatsapp.com/send?phone=628983807869&text=Assalamualaikum Kak Saya Mau Beli">Order Now</a>
+        </div>
+
+        <div class="product">
+            <h2>Control Panel Hosting - 5 RAM 140% CPU</h2>
+            <ul>
+                <li>Panel Ram: 5</li>
+                <li>CPU Usage: 140%</li>
+            </ul>
+            <p class="price">Harga: 6.000</p>
+            <a href="https://api.whatsapp.com/send?phone=628983807869&text=Assalamualaikum Kak Saya Mau Beli">Order Now</a>
+        </div>
+
+        <div class="product">
+            <h2>Control Panel Hosting - 6 RAM 170% CPU</h2>
+            <ul>
+                <li>Panel Ram: 6</li>
+                <li>CPU Usage: 170%</li>
+            </ul>
+            <p class="price">Harga: 7.000</p>
+            <a href="https://api.whatsapp.com/send?phone=628983807869&text=Assalamualaikum Kak Saya Mau Beli">Order Now</a>
+        </div>
+
+        <div class="product">
+            <h2>Control Panel Hosting - 7 RAM 200% CPU</h2>
+            <ul>
+                <li>Panel Ram: 7</li>
+                <li>CPU Usage: 200%</li>
+            </ul>
+            <p class="price">Harga: 8.000</p>
+            <a href="https://api.whatsapp.com/send?phone=628983807869&text=Assalamualaikum Kak Saya Mau Beli">Order Now</a>
+        </div>
+
+        <div class="product">
+            <h2>Control Panel Hosting - 8 RAM 230% CPU</h2>
+            <ul>
+                <li>Panel Ram: 8</li>
+                <li>CPU Usage: 230%</li>
+            </ul>
+            <p class="price">Harga: 9.000</p>
+            <a href="https://api.whatsapp.com/send?phone=628983807869&text=Assalamualaikum Kak Saya Mau Beli">Order Now</a>
+        </div>
+
+        <div class="product">
+            <h2>Control Panel Hosting - 9 RAM 360% CPU</h2>
+            <ul>
+                <li>Panel Ram: 9</li>
+                <li>CPU Usage: 360%</li>
+            </ul>
+            <p class="price">Harga: 10.000</p>
+            <a href="https://api.whatsapp.com/send?phone=628983807869&text=Assalamualaikum Kak Saya Mau Beli">Order Now</a>
+        </div>
+
+        <div class="product">
+            <h2>Control Panel Hosting - 10 RAM 390% CPU</h2>
+            <ul>
+                <li>Panel Ram: 10</li>
+                <li>CPU Usage: 390%</li>
+            </ul>
+            <p class="price">Harga: 11.000</p>
+            <a href="https://api.whatsapp.com/send?phone=628983807869&text=Assalamualaikum Kak Saya Mau Beli">Order Now</a>
+        </div>
+
+        <div class="product">
+            <h2>Control Panel Hosting - Unli CPU</h2>
+            <ul>
+                <li>Panel Ram: Unlimited</li>
+                <li>CPU Usage: Unlimited</li>
+            </ul>
+            <p class="price">Harga: 15.000</p>
+            <a href="https://api.whatsapp.com/send?phone=628983807869&text=Assalamualaikum Kak Saya Mau Beli">Order Now</a>
+        </div>
+
+                <div class="product">
+            <h2>Admin Panel</h2>
+            <ul>
+                <li>Admin Panel Private</li>
+                <li>Spek Vps Ram 16 Core 4</li>
+            </ul>
+            <p class="price">Harga: 20.000</p>
+            <a href="https://api.whatsapp.com/send?phone=628983807869&text=Assalamualaikum Kak Saya Mau Beli">Order Now</a>
+        </div>
+    </div>
+
+    <div class="header">
+        <h1>Xyzen <span>Store</span></h1>
+        <h3>Adalah Store Kebutuhan Hostingmu Yang Dijamin Aman dan Amanah, Store Ini Juga Masih Menyediakan Banyan Kebutuhan Hosting/Bot<h/3>
+        <h5>Jangan Ragu Untuk Membeli</h5>
+    </div>
+
+    <div class="contact-person">
+        <h2>Contact Person</h2>
+        <p>Email: <a href="xyzen23anjas@gmail.com">xyzen23anjas@gmail.com</a></p>
+        <p>WhatsApp: <a href="https://api.whatsapp.com/send?phone=628983807869&text=Assalamualaikum Kak">628983807869</a></p>
+        <p>Telegram: <a href="https://t.me/yucaiove">Xyzen</a></p>
+      
+    </div>
+
+    <div class="footer">
+        <p>&copy; 2024 Xyzen Store. All rights reserved. | <a href="#">Privacy Policy</a></p>
+    </div>
+
+    <script>
+        // Add smooth scrolling effect for anchor links
+        document.querySelectorAll('a[href^="#"]').forEach(anchor => {
+            anchor.addEventListener('click', function(e) {
+                e.preventDefault();
+                document.querySelector(this.getAttribute('href')).scrollIntoView({
+                    behavior: 'smooth'
+                });
+            });
+        });
+    </script>
+</body>
+</html>
+
+
